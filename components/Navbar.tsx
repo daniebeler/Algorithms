@@ -1,7 +1,7 @@
 
 function Navbar() {
     return (
-        <header className="border-b font-bold p-3 flex justify-center">
+        <header className="bg-gray-800 text-white border-b font-bold p-3 flex justify-center">
             Algorithms
         </header>
     )
