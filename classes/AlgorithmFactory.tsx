@@ -4,9 +4,6 @@ import QuickSort from "./QuickSort"
 import SelectionSort from "./SelectionSort"
 
 class AlgorithmFactory {
-    name = 'Quick Sort'
-    description = 'This is the description of quick sort'
-
     createAlgorithm(name: string): Algorithm {
         switch (name) {
             case 'quicksort':

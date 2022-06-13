@@ -1,17 +1,15 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import Navbar from '../components/Navbar'
 import Algorithm from '../interfaces/Algorithm'
 import AlgorithmFactory from '../classes/AlgorithmFactory'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Footer from '../components/Footer'
+import BubbleSort from '../classes/BubbleSort'
 
 const Home: NextPage = () => {
 
   let factory = new AlgorithmFactory()
-
-  let selectedAlgorithm: Algorithm = factory.createAlgorithm('selectionsort')
 
   const algorithms = [
     { id: 'quicksort', name: "Quick Sort" },
@@ -19,14 +17,12 @@ const Home: NextPage = () => {
     { id: 'selectionsort', name: "Selection Sort" },
   ];
 
-   function changeAlgorithm(id: string) {
-    selectedAlgorithm = factory.createAlgorithm(id)
+  function changeAlgorithm(id: string) {
     console.log(selectedAlgorithm)
+    setCount(factory.createAlgorithm(id))
   }
 
-  useEffect(() => {
-    document.title = `You clicked ${selectedAlgorithm.name} times`;
-}, [selectedAlgorithm]);
+  const [selectedAlgorithm, setCount] = useState(new BubbleSort());
 
   return (
     <div>
@@ -38,31 +34,32 @@ const Home: NextPage = () => {
 
       <Navbar />
 
+      <div className="flex bg-gray-50 rounded dark:bg-gray-800 text-white">
+        <div className="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto border-r">
+          <div className="flex flex-col justify-between mt-6">
+            <aside>
+              <ul>
+                {
+                  algorithms.map((algorithm) => (
+                    <li key={algorithm.id}>
+                      <button onClick={() => changeAlgorithm(algorithm.id)} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                        <span className="ml-3">{algorithm.name}</span>
+                      </button>
+                    </li>
+                  ))
+                }
+              </ul>
 
-      <div className='flex flex-row flex-wrap bg-gray-800 text-white'>
+            </aside>
 
-        <aside className="w-64 border-r" aria-label="Sidebar">
-          <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
-            <ul className="space-y-2">
-              {
-                algorithms.map((algorithm) => (
-                  <li key={algorithm.id}>
-                    <button onClick={() => changeAlgorithm(algorithm.id)} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <svg className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
-                      <span className="ml-3">{algorithm.name}</span>
-                    </button>
-                  </li>
-                ))
-              }
-            </ul>
           </div>
-        </aside>
-
-        <main role="main" className='grow'>
+        </div>
+        <div className="w-full h-full p-4 m-8 overflow-y-auto">
           <div>
             <h1 className='pt-8 pb-8 font-bold text-2xl flex justify-center'>{selectedAlgorithm.name}</h1>
           </div>
-          <div className='grid grid-cols-2 p-3' >
+          <div className='grid grid-cols-2 grid-flow-col p-3 auto-cols-auto' >
             <div className='grow'>
               <h1>About</h1>
               <p> {selectedAlgorithm.description} </p>
@@ -88,35 +85,27 @@ const Home: NextPage = () => {
                   <tbody>
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                       <td className="px-6 py-4">
-                        O (n)
+                        {selectedAlgorithm.bestComplexity}
                       </td>
                       <td className="px-6 py-4">
-                        O (n)
+                        {selectedAlgorithm.averageComplexity}
                       </td>
                       <td className="px-6 py-4">
-                        O (n)
+                        {selectedAlgorithm.worstComplexity}
                       </td>
                     </tr>
-
                   </tbody>
                 </table>
               </div>
-
             </div>
           </div>
-
-          <div className='h-screen'>
-
-          </div>
-
-        </main>
-
+        </div>
       </div>
 
-
-      <Footer/>
+      <Footer />
     </div>
   )
 }
 
 export default Home
+
